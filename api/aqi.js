@@ -1,17 +1,12 @@
-const fetch = require('node-fetch');
+// api/aqi.js
 
-module.exports = async (req, res) => {
+export default async function handler(req, res) {
   if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Use POST method only' });
+    return res.status(405).json({ error: 'Only POST requests are allowed.' });
   }
 
   try {
-    let body = '';
-    for await (const chunk of req) {
-      body += chunk;
-    }
-
-    const { city } = JSON.parse(body);
+    const { city } = req.body;
 
     if (!city) {
       return res.status(400).json({ error: 'City is required in request body.' });
@@ -24,12 +19,12 @@ module.exports = async (req, res) => {
     const data = await response.json();
 
     if (data.status === 'ok') {
-      res.status(200).json({ success: true, data: data.data });
+      return res.status(200).json({ success: true, data: data.data });
     } else {
-      res.status(404).json({ success: false, message: 'City not found or data unavailable.' });
+      return res.status(404).json({ success: false, message: 'City not found or data unavailable.' });
     }
 
-  } catch (error) {
-    res.status(500).json({ success: false, message: 'Invalid JSON or server error', error: error.message });
+  } catch (err) {
+    return res.status(500).json({ error: 'Server Error', details: err.message });
   }
-};
+}
