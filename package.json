@@ -1,8 +1,6 @@
 {
-  "name": "vercel-aqi-api",
+  "name": "vercel-waqi-api",
   "version": "1.0.0",
-  "main": "api/aqi.js",
-  "type": "module",
   "dependencies": {
     "node-fetch": "^2.6.7"
   }
